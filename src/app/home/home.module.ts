@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
 import { HomePage } from './home.page';
+import { environment } from '../../environments/environment';
 
 @NgModule({
   imports: [
@@ -20,4 +21,8 @@ import { HomePage } from './home.page';
   ],
   declarations: [HomePage]
 })
-export class HomePageModule {}
+export class HomePageModule {
+  constructor() {
+    console.log(environment, '* Home' );
+  }
+}
