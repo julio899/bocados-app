@@ -1,6 +1,9 @@
 {
   "name": "bocados",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {},
+    "cordova": {}
+  },
   "type": "angular",
   "id": "adf176ef"
 }
