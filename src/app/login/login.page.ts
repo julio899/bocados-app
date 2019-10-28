@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { resolve } from 'url';
 import { post } from 'selenium-webdriver/http';
+import { environment } from '../../environments/environment';
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -23,19 +24,20 @@ inpPass = '';
       });
     await loading.present();
 
-    fetch('https://randomuser.me/api/?results=1',
+    fetch( environment.api + 'check/user',
     {
       method: 'post',
       body: JSON.stringify({ u: this.inpUser, p: this.inpPass })
     }
     ).then(async (r: any) => {
       const r2 = r.clone();
-      const rJson = await r.json().catch( e => {
+      const rJson = await r.json().then(resp=>{
+        console.info(resp);
+        loading.dismiss();
+      }).catch( e => {
         return { error: e, status: r2.status, dt: r2.text() };
       });
-      console.log( rJson );
-      loading.dismiss();
-    }).catch(console.log);
+    }).catch(console.error);
 
     this.inpUser = '';
     this.inpPass = '';
