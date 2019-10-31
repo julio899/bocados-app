@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
-import { resolve } from 'url';
-import { post } from 'selenium-webdriver/http';
-import { environment } from '../../environments/environment';
+import { AuthService } from '../services/auth.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -11,8 +9,7 @@ import { environment } from '../../environments/environment';
 export class LoginPage implements OnInit {
 inpUser = '';
 inpPass = '';
-
-  constructor(public loadingController: LoadingController) { }
+  constructor(public loadingController: LoadingController, private AuthService:AuthService ) { }
 
   ngOnInit() {
   }
@@ -23,7 +20,14 @@ inpPass = '';
       // duration: 1000,
       });
     await loading.present();
+    // ----------------------
+    const respuesta = await this.AuthService.checkLogin()
+        .subscribe( (resp)=>{ return resp; } );
+    console.log('Respuesta: ',respuesta);
+    loading.dismiss();
+    // ----------------------
 
+/*
     fetch( environment.api + 'check/user',
     {
       method: 'post',
@@ -38,7 +42,7 @@ inpPass = '';
         return { error: e, status: r2.status, dt: r2.text() };
       });
     }).catch(console.error);
-
+*/
     this.inpUser = '';
     this.inpPass = '';
   }
