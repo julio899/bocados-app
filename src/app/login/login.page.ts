@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { AuthService } from '../services/auth.service';
+import { LoginData } from '../interfaces/interfaces';
+// import * as jwt from 'jsonwebtoken';
+// const jwt = require ('jsonwebtoken');
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -9,22 +12,28 @@ import { AuthService } from '../services/auth.service';
 export class LoginPage implements OnInit {
 inpUser = '';
 inpPass = '';
-  constructor(public loadingController: LoadingController, private AuthService:AuthService ) { }
+  constructor(public loadingController: LoadingController, private AuthService: AuthService ) { }
 
   ngOnInit() {
   }
 
   async logIn() {
+
     const loading = await this.loadingController.create({
       message: 'Por favor Espere',
       // duration: 1000,
       });
     await loading.present();
     // ----------------------
-    const respuesta = await this.AuthService.checkLogin()
-        .subscribe( (resp)=>{ return resp; } );
-    console.log('Respuesta: ',respuesta);
-    loading.dismiss();
+    const dataCuenta: LoginData = { usuario: this.inpUser, clave: this.inpPass };
+    (await this.AuthService.checkLogin(dataCuenta)).subscribe((r) => {
+
+      setTimeout(() => {
+          console.log('await post', r);
+          loading.dismiss();
+        }, 3000, loading);
+
+      });
     // ----------------------
 
 /*
@@ -43,8 +52,8 @@ inpPass = '';
       });
     }).catch(console.error);
 */
-    this.inpUser = '';
-    this.inpPass = '';
+   this.inpUser = '';
+   this.inpPass = '';
   }
 
 }
